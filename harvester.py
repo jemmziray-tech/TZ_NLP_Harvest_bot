@@ -1,9 +1,14 @@
 import logging
 import re
 import csv
+import os
 from datetime import datetime
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
+from dotenv import load_dotenv
+
+# Load the hidden token from the .env file
+load_dotenv()
 
 # Enable logging to see errors in the terminal
 logging.basicConfig(
@@ -61,8 +66,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # MAIN EXECUTION
 # ---------------------------------------------------------
 if __name__ == "__main__":
-    # REPLACE THIS with your actual BotFather token
-    BOT_TOKEN = "8657813813:AAGKmrf8nVGCsO84d6KjYukHZuszw-_uwQ8"
+    # Securely pull the token from the .env file
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+    # A quick safety check to ensure the .env file is working
+    if not BOT_TOKEN:
+        raise ValueError(
+            "CRITICAL ERROR: No BOT_TOKEN found! Make sure your .env file is set up correctly."
+        )
 
     # Build the bot application
     # We are adding connect_timeout and read_timeout to give it 30 seconds to try connecting
